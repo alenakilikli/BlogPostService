@@ -1,6 +1,7 @@
 package com.example.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
@@ -11,16 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 
 @Entity
 @Table(name = "blog_author")
-public class BlogAuthor {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "blog_author_id")
-    private Long id;
+public class BlogAuthor extends AbstractEntity {
 
     @Column(name = "username")
     private String username;
@@ -36,7 +32,7 @@ public class BlogAuthor {
     private AccountStatus accountStatus;
 
     @Convert(converter = RoleConverter.class)
-    @Column(name = "rolename", nullable = false)
+    @Column(name = "rolename")
     private RoleName roleName;
 
     @Column(name = "updated_on")
@@ -50,14 +46,7 @@ public class BlogAuthor {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
-    @ManyToMany(fetch =FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinTable(name = "roles",
-    joinColumns = {
-            @JoinColumn(name = "blog_author_id")},
-    inverseJoinColumns = {
-            @JoinColumn(name = "role_id")})
-    private List<Role>roles;
+//    @ManyToMany
+//    private List<Role> roles;
 
-    public BlogAuthor(String authorFirstName, String authorLastName, String authorUsername) {
-    }
 }

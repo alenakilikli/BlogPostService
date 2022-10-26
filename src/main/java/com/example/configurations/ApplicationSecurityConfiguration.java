@@ -27,15 +27,9 @@ public class ApplicationSecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/entry/registration", "entry/login", "/public").permitAll()
+                .antMatchers("/entry/registration", "/entry/login", "/public").permitAll()
                 .anyRequest()
                 .authenticated()
-                .and()
-                .httpBasic()
-                .and()
-                .passwordManagement((management) -> management
-                        .changePasswordPage("/update-password")
-                )
                 ;
 
 

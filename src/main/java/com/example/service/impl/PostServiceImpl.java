@@ -11,12 +11,17 @@ import com.example.repository.BlogAuthorRepository;
 import com.example.repository.PostRepository;
 import com.example.service.PostService;
 import com.example.utils.BlogConverter;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -26,21 +31,24 @@ import java.util.List;
 @Transactional
 @Slf4j
 @Service
+@AllArgsConstructor
 public class PostServiceImpl implements PostService {
 
-    @Autowired
-    private PostRepository postRepository;
-    @Autowired
-    private BlogAuthorRepository blogAuthorRepository;
+    private final PostRepository postRepository;
+    private final BlogAuthorRepository blogAuthorRepository;
 
 
     @Override
     public List<BlogPostSearchResponseDTO> findLatestPosts() {
-       // postRepository.findBlogPostsByStatusAndOrderByCreatedOnDesc();
-        return postRepository.findAll().stream()
-                .sorted(Comparator.comparing(BlogPost::getCreatedOn).reversed())
-                .filter(status -> status.getStatus().equals(PostStatus.PUBLISHED))
-                .limit(30)
+
+//        var status =
+        var page = PageRequest.of(1, 30, Sort.by("createdOn").descending());
+        return postRepository.findAllByStatus(PostStatus.PUBLISHED, page)
+                .stream()
+//        return postRepository.findAll().stream()
+//                .sorted(Comparator.comparing(BlogPost::getCreatedOn).reversed())
+//                .filter(status -> status.getStatus().equals(PostStatus.PUBLISHED))
+//                .limit(30)
                 .map(BlogConverter::mapToDto)
                 .toList();
     }
@@ -48,7 +56,8 @@ public class PostServiceImpl implements PostService {
     @Override
     public BlogPostCreateResponseDTO create(PostCreateRequestDTO postCreateRequestDTO) {
 
-        BlogAuthor author = blogAuthorRepository.findById(postCreateRequestDTO.getAuthorId())
+        BlogAuthor author = blogAuthorRepository
+                .findById(postCreateRequestDTO.getAuthorId())
                 .orElseThrow();
 
         if (author.getAccountStatus() == AccountStatus.INACTIVE) {
@@ -67,6 +76,10 @@ public class PostServiceImpl implements PostService {
 
         return BlogConverter.mapToDtoCreate((postRepository.save(blogPost)));
     }
+
+    // @PersistenceContext // == @Autowired for EntityManager
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public List<BlogPostSearchResponseDTO> searchPosts(PostSearchRequestDTO searchRequestDTO) {
@@ -137,7 +150,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<BlogPostSearchResponseDTO> showArticlesByUserName(String name) {
 
-        return postRepository.findAllByAuthor(name)
+        return postRepository.findAllByAuthor_Username(name)
                 .stream()
                 .map(BlogConverter::mapToDtoSearch)
                 .toList();
@@ -152,8 +165,3 @@ public class PostServiceImpl implements PostService {
 
 
 }
-
-
-
-
-

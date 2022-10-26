@@ -1,6 +1,7 @@
 package com.example.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
@@ -14,18 +15,13 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @ToString
 
 @Entity
-@Table(name = "blog_post ")
-public class BlogPost {
+@Table(name = "blog_post")
+public class BlogPost extends AbstractEntity {
 
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "blog_post_id")
-    private Long id;
 
     @Column(name = "title")
     private String title;
@@ -33,7 +29,7 @@ public class BlogPost {
     @Column(name = "body")
     private String body;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "blog_author_id")
     private BlogAuthor author;
 
@@ -42,7 +38,7 @@ public class BlogPost {
     private PostStatus status;
 
     @ElementCollection
-    private Set<String> tags = new HashSet<>();
+    private Set<String> tags;
 
     @Column(name = "updated_on")
     private Instant updatedOn;

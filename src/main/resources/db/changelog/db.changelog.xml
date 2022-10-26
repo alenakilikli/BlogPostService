@@ -1,159 +1,143 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
-                      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
-<!--    <changeSet id="1.0.0" author="java.couchpotato">-->
+    <changeSet id="1.0.0" author="java.couchpotato">
 
-<!--        <createTable tableName="blog_author">-->
-<!--            <column name="blog_author_id" type="bigint" autoIncrement="true">-->
-<!--                <constraints primaryKey="true" nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="username" type="varchar(255)">-->
-<!--                <constraints nullable="false" unique="true"/>-->
-<!--            </column>-->
-<!--            <column name="firstname" type="varchar(255)">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="lastname" type="varchar(255)">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="account_status" type="varchar(25)">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="rolename" type="varchar(50)">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="updated_on" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="created_on" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="is_admin" type="boolean">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="roles" type="varchar(255)">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
+        <createTable tableName="blog_author">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="firstname" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastname" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_status" type="varchar(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rolename" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_on" type="DATETIME" />
+            <column name="created_on" type="DATETIME" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_admin" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="roles" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
 
-<!--        </createTable>-->
-<!--    </changeSet>-->
-<!--    <changeSet id="1.0.1" author="java.couchpotato">-->
-<!--        <createTable tableName="blog_post">-->
-<!--            <column name="blog_post_id" type="bigint" autoIncrement="true">-->
-<!--                <constraints primaryKey="true" nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="title" type="varchar(255)">-->
-<!--                <constraints nullable="false" unique="true"/>-->
-<!--            </column>-->
-<!--            <column name="body" type="varchar(255)">-->
-<!--                <constraints nullable="false" unique="true"/>-->
-<!--            </column>-->
-<!--            <column name="body" type="varchar(255)">-->
-<!--                <constraints nullable="false" unique="true"/>-->
-<!--            </column>-->
-<!--            <column name="post_status" type="varchar(25)" defaultValue="ACTIVE">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="updated_on" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="created_on" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            &lt;!&ndash;ADD TAG COLUMN&ndash;&gt;-->
-<!--            &lt;!&ndash;ADD BLOG AUTHOR COLUMN&ndash;&gt;-->
+        </createTable>
 
-<!--        </createTable>-->
-<!--    </changeSet>-->
+        <createTable tableName="blog_post">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="body" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="post_status" type="varchar(25)" >
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated_on" type="DATETIME" />
+            <column name="created_on" type="DATETIME" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="blog_author_id" type="bigint">
+                <constraints foreignKeyName="FK_BLOG_POST_BLOG_AUTHOR_ID_BLOG_AUTHOR_ID"
+                             referencedTableName="blog_author"
+                             referencedColumnNames="id"/>
+
+            </column>
+            <!--ADD TAG COLUMN-->
+            <!--ADD BLOG AUTHOR COLUMN-->
+
+        </createTable>
+
+        <createTable tableName="roles">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="role_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <createTable tableName="roles">
+            <column name="role_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="role_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
 
 
-<!--    <changeSet id="1.0.3" author="java.couchpotato">-->
-<!--        <createTable tableName="roles">-->
-<!--            <column name="role_id" type="bigint" autoIncrement="true">-->
-<!--                <constraints primaryKey="true" nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="role_name" type="varchar(255)">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            &lt;!&ndash;<column name="" type="varchar(255)">-->
+        </createTable>
 
-<!--            </column>&ndash;&gt;-->
+        <createTable tableName="blog_author_session">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="session_id" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
 
-<!--        </createTable>-->
-<!--    </changeSet>-->
+        <createTable tableName="blog_author_password">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="salt" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
 
-<!--    <changeSet id="1.0.4" author="java.couchpotato">-->
-<!--        <createTable tableName="roles">-->
-<!--            <column name="role_id" type="bigint" autoIncrement="true">-->
-<!--                <constraints primaryKey="true" nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="role_name" type="varchar(255)">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            &lt;!&ndash;<column name=list of Authors>-->
-<!--            </column>&ndash;&gt;-->
+        </createTable>
 
-<!--        </createTable>-->
-<!--    </changeSet>-->
-<!--    <changeSet id="1.0.5" author="java.couchpotato">-->
-<!--        <createTable tableName="blog_author_session">-->
-<!--            <column name="id" type="bigint" autoIncrement="true">-->
-<!--                <constraints primaryKey="true" nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="session_id" type="varchar(255)">-->
-<!--                <constraints nullable="false" unique="true"/>-->
-<!--            </column>-->
-<!--        </createTable>-->
-<!--    </changeSet>-->
-<!--    <changeSet id="1.0.6" author="java.couchpotato">-->
-<!--        <createTable tableName="blog_author_password">-->
-<!--            <column name="blog_password_id" type="bigint" autoIncrement="true">-->
-<!--                <constraints primaryKey="true" nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="salt" type="varchar(255)">-->
-<!--                <constraints nullable="false" unique="true"/>-->
-<!--            </column>-->
-
-<!--        </createTable>-->
-<!--    </changeSet>-->
-
-<!--    <changeSet id="1.0" author="java.couchpotato">-->
 <!--        <addForeignKeyConstraint baseTableName="blog_author"-->
 <!--                                 baseColumnNames="blog_author_id"-->
 <!--                                 constraintName="fk_author_roles"-->
 <!--                                 referencedTableName="roles"-->
 <!--                                 referencedColumnNames="role_id"/>-->
-<!--    </changeSet>-->
-<!--    <changeSet id="1.1" author="java.couchpotato">-->
-<!--        <addForeignKeyConstraint baseTableName="blog_post"-->
-<!--                                 baseColumnNames="blog_post_id"-->
-<!--                                 constraintName="fk_author_posts"-->
-<!--                                 referencedTableName="blog_author"-->
-<!--                                 referencedColumnNames="blog_author_id"/>-->
-<!--    </changeSet>-->
-<!--    <changeSet id="1.2" author="java.couchpotato">-->
-<!--        <addForeignKeyConstraint baseTableName="roles"-->
-<!--                                 baseColumnNames="role_id"-->
-<!--                                 constraintName="fk_roles_roles"-->
-<!--                                 referencedTableName="blog_author"-->
-<!--                                 referencedColumnNames="blog_author_id"/>-->
-<!--    </changeSet>-->
-<!--    <changeSet id="1.3" author="java.couchpotato">-->
-<!--        <addForeignKeyConstraint baseTableName="blog_author-session"-->
-<!--                                 baseColumnNames="id"-->
-<!--                                 constraintName="fk_session_author"-->
-<!--                                 referencedTableName="blog_author"-->
-<!--                                 referencedColumnNames="blog_author_id"/>-->
-<!--    </changeSet>-->
-<!--    <changeSet id="1.4" author="java.couchpotato">-->
-<!--        <addForeignKeyConstraint baseTableName="blog_author-password"-->
-<!--                                 baseColumnNames="blog_password_id"-->
-<!--                                 constraintName="fk_password_author"-->
-<!--                                 referencedTableName="blog_author"-->
-<!--                                 referencedColumnNames="blog_author_id"/>-->
-<!--    </changeSet>-->
+
+        <addForeignKeyConstraint baseTableName="blog_post"
+                                 baseColumnNames="blog_post_id"
+                                 constraintName="fk_author_posts"
+                                 referencedTableName="blog_author"
+                                 referencedColumnNames="blog_author_id"/>
+
+        <addForeignKeyConstraint baseTableName="roles"
+                                 baseColumnNames="role_id"
+                                 constraintName="fk_roles_roles"
+                                 referencedTableName="blog_author"
+                                 referencedColumnNames="blog_author_id"/>
+
+        <addForeignKeyConstraint baseTableName="blog_author-session"
+                                 baseColumnNames="id"
+                                 constraintName="fk_session_author"
+                                 referencedTableName="blog_author"
+                                 referencedColumnNames="blog_author_id"/>
+
+        <addForeignKeyConstraint baseTableName="blog_author-password"
+                                 baseColumnNames="blog_password_id"
+                                 constraintName="fk_password_author"
+                                 referencedTableName="blog_author"
+                                 referencedColumnNames="blog_author_id"/>
+    </changeSet>
 </databaseChangeLog>

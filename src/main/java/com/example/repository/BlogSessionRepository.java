@@ -9,7 +9,6 @@ public interface BlogSessionRepository extends JpaRepository<BlogAuthorSession, 
 
     BlogAuthorSession findBySessionId(String id);
 
-    void deleteBySessionId(BlogAuthorSession blogAuthorSession);
 
 
 }

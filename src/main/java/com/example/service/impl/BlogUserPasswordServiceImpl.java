@@ -5,6 +5,7 @@ import com.example.entity.BlogUserPassword;
 import com.example.repository.BlogUserPasswordRepository;
 import com.example.repository.BlogAuthorRepository;
 import com.example.service.BlogUserPasswordService;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,28 +17,24 @@ import javax.transaction.Transactional;
 @Transactional
 @Slf4j
 @Service
-@NoArgsConstructor
+@AllArgsConstructor
 public class BlogUserPasswordServiceImpl implements BlogUserPasswordService {
 
-    private BlogAuthorRepository userRepository;
-    private BlogUserPasswordRepository passwordRepository;
+    private final BlogAuthorRepository userRepository;
+    private final BlogUserPasswordRepository passwordRepository;
 
-    @Autowired
-    public BlogUserPasswordServiceImpl(BlogAuthorRepository userRepository, BlogUserPasswordRepository passwordRepository) {
-        this.userRepository = userRepository;
-        this.passwordRepository = passwordRepository;
-    }
 
     @Override
     public void generateAndSavePassword(BlogAuthor blogAuthor, String password) {
         String salt = BCrypt.gensalt();
         String encryptedPassword = BCrypt.hashpw(password, salt);
 
-        BlogUserPassword blogUserPassword = new BlogUserPassword(
-                blogAuthor,
-                encryptedPassword,
-                salt
-        );
+        BlogUserPassword blogUserPassword = BlogUserPassword.builder()
+                .user(blogAuthor)
+                .password(encryptedPassword)
+                .salt(salt)
+                .build();
+
         passwordRepository.save(blogUserPassword);
     }
 

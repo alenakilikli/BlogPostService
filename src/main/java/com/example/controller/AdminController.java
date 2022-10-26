@@ -17,10 +17,14 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired
-    private AdminService adminService;
-    @Autowired
-    private EntryController entryService;
+    private final AdminService adminService;
+    private final EntryController entryService;
+
+//    @Autowired
+//    public AdminController(@Autowired AdminService adminService, @Autowired EntryController entryService) {
+//        this.adminService = adminService;
+//        this.entryService = entryService;
+//    }
 
     @PutMapping("users/{userId}/promote")
     public void promote(@PathVariable Long userId) {

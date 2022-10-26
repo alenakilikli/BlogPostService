@@ -9,8 +9,8 @@ public enum PostStatus {
     UNPUBLISHED(2, "unpublished"),
     BLOCKED(3, "blocked");
 
-    private Integer id;
-    private String name;
+    private final Integer id;
+    private final String name;
 
     public Integer getId() {
         return id;

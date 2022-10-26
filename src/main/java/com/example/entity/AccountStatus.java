@@ -2,18 +2,16 @@ package com.example.entity;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 import java.util.Arrays;
 
 @AllArgsConstructor
-@Getter
 public enum AccountStatus {
     ACTIVE(1, "active"),
     INACTIVE(2, "inactive");
 
-    private Integer id;
-    private String name;
+    private final Integer id;
+    private final String name;
 
     public Integer getId() {
         return id;
@@ -29,7 +27,7 @@ public enum AccountStatus {
             return AccountStatus.INACTIVE;
         }
         return Arrays.stream(values())
-                .filter(x->x.getName().toLowerCase().equals(name.toLowerCase()))
+                .filter(x-> x.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElseThrow();
     }
